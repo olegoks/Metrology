@@ -3,81 +3,54 @@
 #ifndef _WINDOW_H_
 #define _WINDOW_H_
 
-#include <Windows.h>
-#include "WindowStructures.h"
-#include <stdlib.h>
-#include <string>
-#include <chrono>
-#include <iostream>
-#include <tchar.h>
 #include <windows.h>
-#include "window/Structures.h"
+#include <tchar.h>
+#include "Structures.h"
+#include "WindowStructures.h"
 
-//#include "wchar_tFunctions.h"
-#include <vector>
+namespace wnd {
 
+	typedef unsigned int uint;
+	typedef DWORD Style;
 
-	namespace wnd {
+	class Window {
+	private:
 
-		struct Size {
-
-			unsigned int height;
-			unsigned int width;
-
-		};
-
-		struct win_coordinats {
+		unsigned int width_;
+		unsigned int height_;
+		unsigned int x_;
+		unsigned int y_;
+		const wchar_t* win_caption_;
+		HWND handle_;
+		HINSTANCE app_intance_handle_;
+		HDC device_context_;
+		Style style_;
+		int n_cmd_show_;
+		static LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM  wParam, LPARAM lParam);
 		
-			unsigned int x;
-			unsigned int y;
 
-		};
-		using namespace std::chrono;
-		class Window {
-		private:
+	protected:
 
-			static Window* This;
-			Size size_;
-			//RgbPixel* display_buffer_;
-			//RgbPixel* now_is_displaying_buffer_;
-			//DISPLAYBUFFERINFO display_buffer_info_;
-			const unsigned int kBitsPerPixel = 32;
-			wchar_t* win_caption;
-			win_coordinats win_coordinats_;
-			HWND Handle;
-			HINSTANCE AppIntanceHandle;
-			HDC DeviceContext;
-			SizeMode sizeMode;
-			high_resolution_clock::time_point first_time_point_count_fps_;
-			std::vector<Keystroke> keys_;
-			static void PushKeystroke(KeyType key);
+		int Create();
+		bool RegisterWindowClass();
+		void Show();
+		virtual void WindowCreate() {};
+		void SetParametrs(const uint width, const uint height, const uint x, const uint y, DWORD style);
+		inline void SetStyle(Style style)noexcept { style_ = style; };
+		inline void SetCaption(const wchar_t* caption) noexcept { win_caption_ = caption; };
+		inline void SetHeight(uint height)noexcept { height_ = height; };
+		inline void SetWidth(uint width)noexcept { width_ = width; };
+		inline void SetPosition(uint x, uint y)noexcept { x_ = x; y_ = y; };
 
-		public:
+	public:
+		static void StartMessageLoop();
+		explicit Window(HINSTANCE appIntanceHandle)noexcept;
+		~Window();
 
-			static	LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM  wParam, LPARAM lParam);
-			Window(HINSTANCE appIntanceHandle);
-			~Window();
-			void SetDisplayBuffer(RgbPixel* display_buffer, const unsigned int display_buffer_size);
 
-			void DisplayFrame();
-			std::vector<Keystroke>* GetKeystrokesBuffer() noexcept { return &keys_; }
-			//RgbPixel* GetHostDisplayBuffer() const noexcept { return display_buffer_; };
-			void SetMode(int mode);
-			void SetCoordinats(unsigned int x, unsigned int y);
-			void SetSize(unsigned int height, unsigned int width);
-			int Create();
-			inline void SetWindowCaption(wchar_t* caption) noexcept { this->win_caption = caption; };
-			bool Show();
-			int StartMessageLoop();
-			bool RegisterWindowClass();
-
-			Size GetSize();
-			HDC GetDeviceContext();
-			HWND GetHandle();
-			win_coordinats GetCoord();
-			void SetSizeMode(SizeMode sizeMode) { this->sizeMode = sizeMode; };
-		};
 
 	};
 
-#endif // !_WINDOW_H_
+};
+
+#endif 

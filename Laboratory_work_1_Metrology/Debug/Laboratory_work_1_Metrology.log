@@ -1,6 +1,5 @@
 ﻿  main.cpp
-main.obj : error LNK2019: ссылка на неразрешенный внешний символ "public: __thiscall wnd::Window::Window(struct HINSTANCE__ *)" (??0Window@wnd@@QAE@PAUHINSTANCE__@@@Z) в функции "int __stdcall WINMAIN(struct HINSTANCE__ *,struct HINSTANCE__ *,char *,int)" (?WINMAIN@@YGHPAUHINSTANCE__@@0PADH@Z)
-main.obj : error LNK2019: ссылка на неразрешенный внешний символ "public: __thiscall wnd::Window::~Window(void)" (??1Window@wnd@@QAE@XZ) в функции "int __stdcall WINMAIN(struct HINSTANCE__ *,struct HINSTANCE__ *,char *,int)" (?WINMAIN@@YGHPAUHINSTANCE__@@0PADH@Z)
-main.obj : error LNK2019: ссылка на неразрешенный внешний символ "public: int __thiscall wnd::Window::Create(void)" (?Create@Window@wnd@@QAEHXZ) в функции "int __stdcall WINMAIN(struct HINSTANCE__ *,struct HINSTANCE__ *,char *,int)" (?WINMAIN@@YGHPAUHINSTANCE__@@0PADH@Z)
-MSVCRTD.lib(exe_winmain.obj) : error LNK2019: ссылка на неразрешенный внешний символ _WinMain@16 в функции "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
-D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\Debug\Laboratory_work_1_Metrology.exe : fatal error LNK1120: неразрешенных внешних элементов: 4
+  Window.cpp
+  Создание кода...
+D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\window\Window.cpp(62): warning C4715:  wnd::Window::WndProc: значение возвращается не при всех путях выполнения
+  Laboratory_work_1_Metrology.vcxproj -> D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\Debug\Laboratory_work_1_Metrology.exe
