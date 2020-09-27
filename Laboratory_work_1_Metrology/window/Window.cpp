@@ -12,6 +12,15 @@ namespace wnd {
 
 		switch (Message) {
 
+		case WM_CREATE: {
+
+			LPCREATESTRUCT lpcs = (LPCREATESTRUCT)lParam;
+			Window* wnd_ptr = (Window*) lpcs->lpCreateParams;
+			wnd_ptr->WindowCreate();
+			SetWindowLongPtr(hWnd, GWL_USERDATA, (LONG)wnd_ptr);
+
+			break;
+		}
 			/*case WM_KEYDOWN: {
 
 				const unsigned int key = wParam;
@@ -62,19 +71,22 @@ namespace wnd {
 		}
 
 
-		Window::Window(HINSTANCE app_intance_handle)noexcept: 
+		Window::Window(HINSTANCE app_intance_handle)noexcept://, Style style)noexcept: 
+			Component(NULL, app_intance_handle),
 			app_intance_handle_ (app_intance_handle),
-			x_(0),
-			y_ (0),
-			height_(500),
-			width_(1000),
 			device_context_(nullptr),
 			win_caption_(nullptr),
 			handle_(nullptr),
-			style_(),
+			style_(NULL),
 			n_cmd_show_(SW_SHOWNORMAL){
 
-			
+
+			RegisterWindowClass();
+			CreateWnd();
+			Show();
+
+			id_ = window_id_;
+			window_id_++;
 
 		}
 		
@@ -83,10 +95,10 @@ namespace wnd {
 
 		}
 
-
 		bool Window::RegisterWindowClass() {
 
-			TCHAR szClassName[] = L"Main window class"; // строка с именем класса
+			sz_class_name_ = GenerateDefaultClassName();
+
 			WNDCLASSEX wc; //Создаем экземпляр класса WNDCLASSEX
 			wc.cbSize = sizeof(wc);
 			wc.style = CS_HREDRAW | CS_VREDRAW;
@@ -98,7 +110,7 @@ namespace wnd {
 			wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 			wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
 			wc.lpszMenuName = NULL;
-			wc.lpszClassName = szClassName;
+			wc.lpszClassName = sz_class_name_;
 			wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 
 			if (!RegisterClassEx(&wc)) {
@@ -115,41 +127,46 @@ namespace wnd {
 			return EXIT_SUCCESS;
 
 		}
+		wchar_t* Window::GenerateDefaultClassName() {
 
-		int  Window::Create()
+			wchar_t id_wide[2];
+			_itow(id_, id_wide, 10);
+			wchar_t default_name[] = L"Window class name ";
+			unsigned int size_of_default_name = wcslen(default_name);
+			wchar_t* class_name;
+			class_name = (wchar_t*)malloc( sizeof(wchar_t) * (size_of_default_name + 2) );
+			wcscpy(class_name, default_name);
+			wcscpy(class_name + size_of_default_name, id_wide);
+			return class_name;
+
+		}
+
+		int  Window::CreateWnd()
 		{
-			
-			TCHAR szClassName[] = L"Main window class";
-
-			HWND HMainWnd;
 
 			/*HMainWnd = CreateWindowEx(WS_EX_TOPMOST, szClassName, L"3D Application", WS_OVERLAPPEDWINDOW,
 				0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), (HWND)NULL,
 				(HMENU)NULL, (HINSTANCE)this->AppIntanceHandle, NULL);*/
-			HMainWnd = CreateWindow(szClassName,
-				win_caption_, //L"3D Application", // имя окна (то что сверху)
+			handle_ = CreateWindow(sz_class_name_,//(LPCWSTR)this,
+				win_caption_, //L"3D Application", // имя окнa
 				style_,//WS_MAXIMIZE | WS_BORDER | WS_VISIBLE,  // режимы отображения окошка
-				x_, // положение окна по оси х (по умолчанию)
-				y_, // позиция окна по оси у (раз дефолт в х, то писать не нужно)
-				width_, // ширина окошка (по умолчанию)
-				height_, // высота окна (раз дефолт в ширине, то писать не нужно)
+				x_, // положение окна по оси х
+				y_, // позиция окна по оси у
+				width_, // ширина окошка
+				height_, // высота окна
 				HWND(NULL), // дескриптор родительского окошка
 				NULL, // дескриптор меню 
 				app_intance_handle_, // lдескриптор экземпляра приложения
-				NULL); // ничего не передаём из WndProc
-			
+				this); // ничего не передаём из WndProc
 
-			SetWindowLongPtr(HMainWnd, GWL_USERDATA, (LONG) this);
-
-			if (!HMainWnd) {
+			if (!handle_) {
 				// в случае некорректного создания окна (неверные параметры и тп):
 				MessageBox(NULL, L"Не получилось создать окно!", L"Ошибка", MB_OK);
 				return EXIT_FAILURE; // выходим из приложения
 			}
 			
-			handle_ = HMainWnd;
 			SetProcessDPIAware();//Вызывая эту функцию (SetProcessDPIAware), вы сообщаете системе, что интерфейс вашего приложения умеет сам правильно масштабироваться при высоких значениях DPI (точки на дюйм). Если вы не выставите этот флаг, то интерфейс вашего приложения может выглядеть размыто при высоких значениях DPI.
-			device_context_ = GetDC(HMainWnd);//CreateDC(L"DISPLAY", NULL, NULL, NULL);
+			device_context_ = GetDC(handle_);//CreateDC(L"DISPLAY", NULL, NULL, NULL);
 
 			return EXIT_SUCCESS;
 		}
@@ -163,13 +180,15 @@ namespace wnd {
 			style_ = style;
 		}
 
+		void Window::SetCaption(const wchar_t* caption)
+		{
+			win_caption_ = caption; 
+			//SetWindowText(handle_, win_caption_);
+		}
+
 		void  Window::Show()
 		{
-
-
 			bool temp = ShowWindow(handle_, n_cmd_show_);
-
-
 		}
 
 
@@ -214,6 +233,8 @@ namespace wnd {
 			//Функция DispatchMessage распределяет сообщение оконной процедуре WndProc.
 
 		}
+
+		uint Window::window_id_ = 0;
 
 
 

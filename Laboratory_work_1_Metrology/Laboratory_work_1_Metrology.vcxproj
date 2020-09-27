@@ -76,6 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\window;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -124,10 +125,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="window\Component\Component.cpp" />
+    <ClCompile Include="window\Text\Text.cpp" />
     <ClCompile Include="window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="window\Component\Component.h" />
     <ClInclude Include="window\Structures.h" />
+    <ClInclude Include="window\Text\Text.h" />
     <ClInclude Include="window\Window.h" />
     <ClInclude Include="window\WindowStructures.h" />
   </ItemGroup>

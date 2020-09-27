@@ -3,36 +3,36 @@
 class MyWindow :public wnd::Window {
 private:
 	
-	
 
 protected:
+
 	void WindowCreate()override;
+	Text text;
+
 public:
 
-	explicit MyWindow(HINSTANCE hInstance):Window(hInstance){
-
-		RegisterWindowClass();
-		WindowCreate();
-		Create();
-		Show();
+	explicit MyWindow(HINSTANCE hInstance):Window(hInstance),//, WS_OVERLAPPEDWINDOW),
+		text(WndHandle(), AppInstanceHandle())
+	{
+		//SetCaption();
+		//SetStyle();
+		text.Show();
 
 	}
-
-
 
 };
 
 void MyWindow::WindowCreate() {
 
-	SetCaption(L"Default caption");
-	SetStyle(WS_OVERLAPPEDWINDOW | WS_VSCROLL);
-
+	SetCaption(L"My caption.");
+	SetStyle(WS_OVERLAPPEDWINDOW);
 }
+
+
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 
 	MyWindow main_window(hInstance);
-
 	wnd::Window::StartMessageLoop();
 
 	return EXIT_SUCCESS;

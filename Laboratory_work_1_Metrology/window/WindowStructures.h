@@ -15,4 +15,8 @@ enum SizeMode {
 #define VK_W 87
 #define VK_S 83
 
+typedef unsigned int uint;
+typedef DWORD Style;
+
+
 #endif
