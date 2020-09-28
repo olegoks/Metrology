@@ -17,6 +17,7 @@ enum SizeMode {
 
 typedef unsigned int uint;
 typedef DWORD Style;
+const short ID_BUTTON = 0;
 
 
 #endif

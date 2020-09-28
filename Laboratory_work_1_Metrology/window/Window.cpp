@@ -6,94 +6,65 @@
 
 namespace wnd {
 
-		LRESULT CALLBACK Window:: WndProc(HWND hWnd, UINT Message, WPARAM  wParam, LPARAM lParam) {
+	LRESULT CALLBACK Window::WndProc(HWND hWnd, UINT Message, WPARAM  wParam, LPARAM lParam) {
 
-		Window* const window_ptr = reinterpret_cast<Window* const>(GetWindowLongPtr(hWnd, GWL_USERDATA));
+		Window* const window_ptr = reinterpret_cast<Window * const>(GetWindowLongPtr(hWnd, GWL_USERDATA));
 
 		switch (Message) {
 
 		case WM_CREATE: {
 
 			LPCREATESTRUCT lpcs = (LPCREATESTRUCT)lParam;
-			Window* wnd_ptr = (Window*) lpcs->lpCreateParams;
+			Window* const wnd_ptr = (Window*)lpcs->lpCreateParams;
+			wnd_ptr->self_handle_ = hWnd;
 			wnd_ptr->WindowCreate();
 			SetWindowLongPtr(hWnd, GWL_USERDATA, (LONG)wnd_ptr);
 
 			break;
-		}
-			/*case WM_KEYDOWN: {
+		}	
 
-				const unsigned int key = wParam;
-
-				switch (key) {
-
-				case VK_UP: { window_ptr->PushKeystroke(ArrowUp);break;}
-				case VK_DOWN: { window_ptr->PushKeystroke(ArrowDown);break;}
-				case VK_LEFT: { window_ptr->PushKeystroke(ArrowLeft);break;};
-				case VK_RIGHT: { window_ptr->PushKeystroke(ArrowRight);break;}
-				case VK_A: { window_ptr->PushKeystroke(A); break; };
-				case VK_D: { window_ptr->PushKeystroke(D); break; };
-				case VK_S: { window_ptr->PushKeystroke(S); break; };
-				case VK_W: { window_ptr->PushKeystroke(W); break; };
-
-				}
-				
-			break;
+		case WM_COMMAND: {
 			
+			if (LOWORD(wParam) == ID_BUTTON) {
+				window_ptr->ButtonClicked(HIWORD(wParam), (HWND)lParam);
 			}
 
-			case WM_MOUSEWHEEL: {
-
-				static int wheel_delta = 0;
-				wheel_delta += GET_WHEEL_DELTA_WPARAM(wParam);
-				
-				while (wheel_delta > WHEEL_DELTA) {
-					window_ptr->PushKeystroke(WheelUp);
-					wheel_delta -= WHEEL_DELTA;
-				}
-				
-				while (wheel_delta < 0) {
-					window_ptr->PushKeystroke(WheelDown);
-					wheel_delta += WHEEL_DELTA;
-				}
-
-				break;
-			}*/
-
-			case WM_CLOSE: {DestroyWindow(window_ptr->handle_);break;}
-
-			case WM_DESTROY: {PostQuitMessage(0);break;}
-		
-			default: return DefWindowProc(hWnd, Message, wParam, lParam); 
-		
+			break;
 		}
+
+		case WM_CLOSE: {DestroyWindow(window_ptr->self_handle_); break; }
+
+		case WM_DESTROY: {PostQuitMessage(0); break; }
+
+		default: return DefWindowProc(hWnd, Message, wParam, lParam);
 
 		}
 
-
-		Window::Window(HINSTANCE app_intance_handle)noexcept://, Style style)noexcept: 
-			Component(NULL, app_intance_handle),
-			app_intance_handle_ (app_intance_handle),
-			device_context_(nullptr),
-			win_caption_(nullptr),
-			handle_(nullptr),
-			style_(NULL),
-			n_cmd_show_(SW_SHOWNORMAL){
+	}
 
 
-			RegisterWindowClass();
-			CreateWnd();
-			Show();
+	Window::Window(HINSTANCE app_instance_handle)noexcept: 
+		Component(app_instance_handle),
+		device_context_(nullptr),
+		win_caption_((const wchar_t*) new wchar_t[17] {L"Default caption."})
+	{
 
-			id_ = window_id_;
-			window_id_++;
+		id_ = NewWindowId(); number_of_windows_;
+		number_of_windows_++;
 
-		}
-		
-		Window::~Window() {
+	}
+
+	void Window::Create() {
+
+		RegisterWindowClass();
+		CreateWnd();
+
+	}
+
+	Window::~Window() {
 			
 
-		}
+	}
 
 		bool Window::RegisterWindowClass() {
 
@@ -105,7 +76,7 @@ namespace wnd {
 			wc.lpfnWndProc = WndProc;
 			wc.cbClsExtra = 0;
 			wc.cbWndExtra = 0;
-			wc.hInstance = app_intance_handle_;
+			wc.hInstance = app_instance_handle_;
 			wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 			wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 			wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
@@ -127,6 +98,12 @@ namespace wnd {
 			return EXIT_SUCCESS;
 
 		}
+		uint Window::NewWindowId()
+		{
+			uint new_id = number_of_windows_;
+			number_of_windows_++;
+			return new_id;
+		}
 		wchar_t* Window::GenerateDefaultClassName() {
 
 			wchar_t id_wide[2];
@@ -143,30 +120,16 @@ namespace wnd {
 
 		int  Window::CreateWnd()
 		{
+			CreateWindow(sz_class_name_, win_caption_, style_, x_,  y_, width_, height_,
+							parent_handle_, menu_handle_,app_instance_handle_,this);
 
-			/*HMainWnd = CreateWindowEx(WS_EX_TOPMOST, szClassName, L"3D Application", WS_OVERLAPPEDWINDOW,
-				0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), (HWND)NULL,
-				(HMENU)NULL, (HINSTANCE)this->AppIntanceHandle, NULL);*/
-			handle_ = CreateWindow(sz_class_name_,//(LPCWSTR)this,
-				win_caption_, //L"3D Application", // имя окнa
-				style_,//WS_MAXIMIZE | WS_BORDER | WS_VISIBLE,  // режимы отображения окошка
-				x_, // положение окна по оси х
-				y_, // позиция окна по оси у
-				width_, // ширина окошка
-				height_, // высота окна
-				HWND(NULL), // дескриптор родительского окошка
-				NULL, // дескриптор меню 
-				app_intance_handle_, // lдескриптор экземпляра приложения
-				this); // ничего не передаём из WndProc
-
-			if (!handle_) {
-				// в случае некорректного создания окна (неверные параметры и тп):
+			if (!self_handle_) {
 				MessageBox(NULL, L"Не получилось создать окно!", L"Ошибка", MB_OK);
-				return EXIT_FAILURE; // выходим из приложения
+				return EXIT_FAILURE;
 			}
 			
 			SetProcessDPIAware();//Вызывая эту функцию (SetProcessDPIAware), вы сообщаете системе, что интерфейс вашего приложения умеет сам правильно масштабироваться при высоких значениях DPI (точки на дюйм). Если вы не выставите этот флаг, то интерфейс вашего приложения может выглядеть размыто при высоких значениях DPI.
-			device_context_ = GetDC(handle_);//CreateDC(L"DISPLAY", NULL, NULL, NULL);
+			device_context_ = GetDC(self_handle_);
 
 			return EXIT_SUCCESS;
 		}
@@ -180,15 +143,22 @@ namespace wnd {
 			style_ = style;
 		}
 
+		void Window::SetStyle(Style style) noexcept
+		{ 
+			style_ = style; 
+			SetWindowLongPtr(self_handle_, GWL_STYLE, style_);
+		}
+
 		void Window::SetCaption(const wchar_t* caption)
 		{
 			win_caption_ = caption; 
-			//SetWindowText(handle_, win_caption_);
+			SetWindowText(self_handle_, win_caption_);
 		}
 
-		void  Window::Show()
+		void  Window::Show(int show_state)
 		{
-			bool temp = ShowWindow(handle_, n_cmd_show_);
+			show_state_ = show_state;
+			bool temp = ShowWindow(self_handle_, show_state_);
 		}
 
 
@@ -208,10 +178,8 @@ namespace wnd {
 				} MSG;
 			*/
 
-			MSG msg; // создём экземпляр структуры MSG для обработки сообщений
-
-			msg = { 0 }; // Инициализация структуры сообщения 
-
+			MSG msg;
+			msg = { 0 };
 			while (GetMessage(&msg, NULL, NULL, NULL) != NULL) {
 
 				TranslateMessage(&msg);
@@ -234,9 +202,6 @@ namespace wnd {
 
 		}
 
-		uint Window::window_id_ = 0;
-
-
-
+		uint Window::number_of_windows_ = 0;
 
 }

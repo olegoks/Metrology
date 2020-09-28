@@ -17,41 +17,36 @@ namespace wnd {
 
 		const wchar_t* win_caption_;
 		const wchar_t* sz_class_name_;
-		HWND handle_;
-		HINSTANCE app_intance_handle_;
 		HDC device_context_;
-		Style style_;
-		int n_cmd_show_;
-		static LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM  wParam, LPARAM lParam);
-		static uint window_id_;
 		uint id_;
+		static uint number_of_windows_;
+		static LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM  wParam, LPARAM lParam);
 		wchar_t* GenerateDefaultClassName();
+		int CreateWnd();
+		bool RegisterWindowClass();
+		uint NewWindowId();
 
 	protected:
 
-		int CreateWnd();
-		bool RegisterWindowClass();
-		void Show();
 		void SetParametrs(const uint width, const uint height, const uint x, const uint y, DWORD style);
-		inline void SetStyle(Style style)noexcept { style_ = style; };
+		void SetStyle(Style style)noexcept;
 		void SetCaption(const wchar_t* caption);
 		inline void SetHeight(uint height)noexcept { height_ = height; };
 		inline void SetWidth(uint width)noexcept { width_ = width; };
 		inline void SetPosition(uint x, uint y)noexcept { x_ = x; y_ = y; };
-		HWND WndHandle() { return handle_; };
-		HINSTANCE AppInstanceHandle() { return app_intance_handle_; };
+		inline HWND WndHandle()const noexcept { return self_handle_; };
+		inline HINSTANCE AppInstanceHandle()const noexcept { return app_instance_handle_; };
 		virtual void WindowCreate() {};
-
+		virtual void ButtonClicked(uint notification_code, HWND button_handle) {};
 	public:
 
+		void Create();
+		void Show(int show_state);
 		static void StartMessageLoop();
-		explicit Window(HINSTANCE appIntanceHandle)noexcept; //Style style)noexcept;
+		explicit Window(HINSTANCE appIntanceHandle)noexcept;
 		~Window();
 
 	};
-
-
-
 
 };
 
