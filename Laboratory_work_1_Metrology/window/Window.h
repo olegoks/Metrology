@@ -31,17 +31,19 @@ namespace wnd {
 		void SetParametrs(const uint width, const uint height, const uint x, const uint y, DWORD style);
 		void SetStyle(Style style)noexcept;
 		void SetCaption(const wchar_t* caption);
+		void SetShowState(int show_state)noexcept;
 		inline void SetHeight(uint height)noexcept { height_ = height; };
 		inline void SetWidth(uint width)noexcept { width_ = width; };
 		inline void SetPosition(uint x, uint y)noexcept { x_ = x; y_ = y; };
 		inline HWND WndHandle()const noexcept { return self_handle_; };
 		inline HINSTANCE AppInstanceHandle()const noexcept { return app_instance_handle_; };
+
 		virtual void WindowCreate() {};
 		virtual void ButtonClicked(uint notification_code, HWND button_handle) {};
 	public:
 
 		void Create();
-		void Show(int show_state);
+		void Show();
 		static void StartMessageLoop();
 		explicit Window(HINSTANCE appIntanceHandle)noexcept;
 		~Window();

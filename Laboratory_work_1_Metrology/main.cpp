@@ -1,5 +1,6 @@
 #include "window/Window.h"
 #include "Button/Button.h"
+#include "DialogWindow/DialogWindow.h"
 
 class MyWindow :public wnd::Window {
 private:
@@ -12,13 +13,15 @@ protected:
 	Text text;
 	Text text_2;
 	Button button;
+	DialogWindow open_file_;
 
 public:
 
 	explicit MyWindow(HINSTANCE hInstance) :Window(hInstance),
 		text(hInstance),
 		text_2(hInstance),
-		button(hInstance)
+		button(hInstance),
+		open_file_(hInstance)
 	{
 
 
@@ -28,13 +31,15 @@ public:
 
 void MyWindow::WindowCreate() {
 
-
 	SetCaption(L"My caption.");
 	SetStyle(WS_OVERLAPPEDWINDOW);
-
+	SetShowState(SW_SHOWNORMAL);
 	const Style text_style = WS_CHILD | WS_VISIBLE;
 	const int show_state = SW_SHOWNORMAL;
+	//uint wnd_height = GetHeight();
+	//uint wnd_width = GetWidth();
 
+	
 	text.SetParametrs(0, 0, 100, 100);
 	text.Create(WndHandle(), L"Some text_1.", text_style);
 	text.Show(show_state);
@@ -46,6 +51,8 @@ void MyWindow::WindowCreate() {
 	button.SetParametrs(100, 0, 100, 100);
 	button.Create(WndHandle(), L"Button.", text_style);
 	button.Show(show_state);
+
+	open_file_.Create(self_handle_, L"some.txt");
 
 }
 
@@ -61,7 +68,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	MyWindow main_window(hInstance);
 	main_window.Create();
-	main_window.Show(SW_SHOWNORMAL);
+	main_window.Show();
 	MyWindow::StartMessageLoop();
 	return EXIT_SUCCESS;
 }

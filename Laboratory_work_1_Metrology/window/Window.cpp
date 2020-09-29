@@ -32,9 +32,15 @@ namespace wnd {
 			break;
 		}
 
-		case WM_CLOSE: {DestroyWindow(window_ptr->self_handle_); break; }
+		case WM_CLOSE: {
+			DestroyWindow(window_ptr->self_handle_);
+			break;
+		}
 
-		case WM_DESTROY: {PostQuitMessage(0); break; }
+		case WM_DESTROY: {
+			PostQuitMessage(0); 
+			break; 
+		}
 
 		default: return DefWindowProc(hWnd, Message, wParam, lParam);
 
@@ -155,9 +161,13 @@ namespace wnd {
 			SetWindowText(self_handle_, win_caption_);
 		}
 
-		void  Window::Show(int show_state)
+		void Window::SetShowState(int show_state)noexcept
 		{
 			show_state_ = show_state;
+		}
+
+		void  Window::Show()
+		{
 			bool temp = ShowWindow(self_handle_, show_state_);
 		}
 

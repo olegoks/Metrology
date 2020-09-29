@@ -10,7 +10,7 @@ static const uint DEFAULT_HEIGHT = 500;
 static const uint DEFAULT_X = 0;
 static const uint DEFAULT_Y = 0;
 static const Style DEFAULT_STYLE = NULL;
-static const int DEFAULT_CMD_SHOW = NULL;
+static const int DEFAULT_CMD_SHOW = SW_SHOWNORMAL;
 
 class Component {
 private:
@@ -25,6 +25,7 @@ protected:
 	HINSTANCE app_instance_handle_;
 	Style style_;
 	int show_state_;
+
 
 public:
 
@@ -50,6 +51,11 @@ public:
 		parent_handle_(NULL), menu_handle_(NULL), app_instance_handle_(app_intance_handle) {
 
 	}
+
+	inline uint GetHeight()const noexcept { return height_; };
+	inline uint GetWidth()const noexcept { return width_; };
+	inline uint GetX()const noexcept { return x_; }
+	inline uint GetY()const noexcept { return y_; }
 
 };
 #endif
