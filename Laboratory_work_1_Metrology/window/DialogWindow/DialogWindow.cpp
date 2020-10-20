@@ -2,38 +2,39 @@
 
 DialogWindow::DialogWindow(HINSTANCE app_instance_handle)noexcept:
 	Component(app_instance_handle),
-	file_name_((wchar_t*) new wchar_t[20]{ L"Default_file_name.d" }),
-	file_handle_(NULL)
+	file_name_{L"Default_file_name.d"}
 {
 
 	ZeroMemory(&init_struct_, sizeof(OPENFILENAME));
+
 	init_struct_.lStructSize = sizeof(OPENFILENAME);
-	init_struct_.hwndOwner = parent_handle_;
-	init_struct_.lpstrFile = file_name_;
-	init_struct_.lpstrFilter = L"\0";
+	init_struct_.hwndOwner = NULL;
+	init_struct_.lpstrFile = direct_;
+	*(init_struct_.lpstrFile) = 0;
+	init_struct_.nMaxFile = sizeof( direct_);
+	init_struct_.lpstrFilter = NULL;
 	init_struct_.nFilterIndex = 1;
-	init_struct_.nMaxFileTitle = NULL;
+	init_struct_.lpstrFileTitle = file_name_;
+	*(init_struct_.lpstrFileTitle) = 0;
+	init_struct_.nMaxFileTitle = sizeof(file_name_);
 	init_struct_.lpstrInitialDir = NULL;
-	init_struct_.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+	init_struct_.Flags = OFN_EXPLORER;
 
 }
 
-void DialogWindow::Create(HWND parent_handle,const wchar_t* file_name)
+const wchar_t*  DialogWindow::Create(HWND parent_handle)
 {
 	parent_handle_ = parent_handle;
 	init_struct_.hwndOwner = parent_handle_;
+
 	if (GetOpenFileName(&init_struct_)) {
-		file_handle_ = CreateFile(init_struct_.lpstrFile,
-			GENERIC_READ,
-			NULL,
-			NULL,
-			OPEN_EXISTING,
-			FILE_ATTRIBUTE_NORMAL,
-			NULL);
+
+		return direct_;
+	
 	}
-	//else {
-		uint error_info = CommDlgExtendedError();
-	//}
+	
+	return nullptr;
+
 }
 
 

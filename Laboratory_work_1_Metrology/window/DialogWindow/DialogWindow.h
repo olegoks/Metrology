@@ -6,13 +6,18 @@
 
 class DialogWindow :public Component {
 private:
+
 	OPENFILENAME init_struct_;
-	HANDLE file_handle_;
-	wchar_t* file_name_;
+	wchar_t file_name_[260];
+	wchar_t direct_[260];
+
 protected:
+
 public:
+
 	explicit DialogWindow(HINSTANCE app_instance_handle)noexcept;
-	void Create(HWND parent_handle, const wchar_t* file_name);
+	const wchar_t* Create(HWND parent_handle);
+
 };
 
 #endif

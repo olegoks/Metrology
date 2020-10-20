@@ -26,23 +26,30 @@ namespace wnd {
 		case WM_COMMAND: {
 			
 			if (LOWORD(wParam) == ID_BUTTON) {
+
 				window_ptr->ButtonClicked(HIWORD(wParam), (HWND)lParam);
+
 			}
 
 			break;
 		}
 
 		case WM_CLOSE: {
+
 			DestroyWindow(window_ptr->self_handle_);
+			
 			break;
 		}
 
 		case WM_DESTROY: {
+
 			PostQuitMessage(0); 
+
 			break; 
 		}
 
-		default: return DefWindowProc(hWnd, Message, wParam, lParam);
+		default:
+			return DefWindowProc(hWnd, Message, wParam, lParam);
 
 		}
 
@@ -72,109 +79,113 @@ namespace wnd {
 
 	}
 
-		bool Window::RegisterWindowClass() {
+	bool Window::RegisterWindowClass() {
 
-			sz_class_name_ = GenerateDefaultClassName();
+		sz_class_name_ = GenerateDefaultClassName();
 
-			WNDCLASSEX wc; //Создаем экземпляр класса WNDCLASSEX
-			wc.cbSize = sizeof(wc);
-			wc.style = CS_HREDRAW | CS_VREDRAW;
-			wc.lpfnWndProc = WndProc;
-			wc.cbClsExtra = 0;
-			wc.cbWndExtra = 0;
-			wc.hInstance = app_instance_handle_;
-			wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-			wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-			wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-			wc.lpszMenuName = NULL;
-			wc.lpszClassName = sz_class_name_;
-			wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+		WNDCLASSEX wc; //Создаем экземпляр класса WNDCLASSEX
+		wc.cbSize = sizeof(wc);
+		wc.style = CS_HREDRAW | CS_VREDRAW;
+		wc.lpfnWndProc = WndProc;
+		wc.cbClsExtra = 0;
+		wc.cbWndExtra = 0;
+		wc.hInstance = app_instance_handle_;
+		wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+		wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+		wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+		wc.lpszMenuName = NULL;
+		wc.lpszClassName = sz_class_name_;
+		wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 
-			if (!RegisterClassEx(&wc)) {
+		if (!RegisterClassEx(&wc)) {
 
-				MessageBox(nullptr,
-					L"Не удалось зарегестрировать класс",
-					L"Ошибка регистрации класса!",
-					MB_OK);
+			MessageBox(nullptr,
+				L"Не удалось зарегестрировать класс",
+				L"Ошибка регистрации класса!",
+				MB_OK);
 
-				return EXIT_FAILURE;
-
-			}
-
-			return EXIT_SUCCESS;
-
-		}
-		uint Window::NewWindowId()
-		{
-			uint new_id = number_of_windows_;
-			number_of_windows_++;
-			return new_id;
-		}
-		wchar_t* Window::GenerateDefaultClassName() {
-
-			wchar_t id_wide[2];
-			_itow(id_, id_wide, 10);
-			wchar_t default_name[] = L"Window class name ";
-			unsigned int size_of_default_name = wcslen(default_name);
-			wchar_t* class_name;
-			class_name = (wchar_t*)malloc( sizeof(wchar_t) * (size_of_default_name + 2) );
-			wcscpy(class_name, default_name);
-			wcscpy(class_name + size_of_default_name, id_wide);
-			return class_name;
+			return EXIT_FAILURE;
 
 		}
 
-		int  Window::CreateWnd()
-		{
-			CreateWindow(sz_class_name_, win_caption_, style_, x_,  y_, width_, height_,
-							parent_handle_, menu_handle_,app_instance_handle_,this);
+		return EXIT_SUCCESS;
 
-			if (!self_handle_) {
-				MessageBox(NULL, L"Не получилось создать окно!", L"Ошибка", MB_OK);
-				return EXIT_FAILURE;
-			}
+	}
+
+	uint Window::NewWindowId()
+	{
+		uint new_id = number_of_windows_;
+		number_of_windows_++;
+		return new_id;
+	}
+
+	wchar_t* Window::GenerateDefaultClassName() {
+		
+		wchar_t id_wide[2];
+		_itow(id_, id_wide, 10);
+		wchar_t default_name[] = L"Window class name ";
+		unsigned int size_of_default_name = wcslen(default_name);
+		wchar_t* class_name;
+		class_name = (wchar_t*)malloc( sizeof(wchar_t) * (size_of_default_name + 2) );
+		wcscpy(class_name, default_name);
+		wcscpy(class_name + size_of_default_name, id_wide);
+		return class_name;
+
+	}
+
+	int  Window::CreateWnd()
+	{
+
+		CreateWindow(sz_class_name_, win_caption_, style_, x_,  y_, width_, height_,
+						parent_handle_, menu_handle_,app_instance_handle_,this);
+
+		if (!self_handle_) {
+
+			MessageBox(NULL, L"Не получилось создать окно!", L"Ошибка", MB_OK);
+			return EXIT_FAILURE;
+
+		}
 			
-			SetProcessDPIAware();//Вызывая эту функцию (SetProcessDPIAware), вы сообщаете системе, что интерфейс вашего приложения умеет сам правильно масштабироваться при высоких значениях DPI (точки на дюйм). Если вы не выставите этот флаг, то интерфейс вашего приложения может выглядеть размыто при высоких значениях DPI.
-			device_context_ = GetDC(self_handle_);
+		SetProcessDPIAware();//Вызывая эту функцию (SetProcessDPIAware), вы сообщаете системе, что интерфейс вашего приложения умеет сам правильно масштабироваться при высоких значениях DPI (точки на дюйм). Если вы не выставите этот флаг, то интерфейс вашего приложения может выглядеть размыто при высоких значениях DPI.
+		device_context_ = GetDC(self_handle_);
 
-			return EXIT_SUCCESS;
-		}
+		return EXIT_SUCCESS;
+	}
 
-		void Window::SetParametrs(const uint width, const uint height, const uint x, const uint y, DWORD style)
-		{
-			width_ = width;
-			height_ = height;
-			x_ = x;
-			y_ = y;
-			style_ = style;
-		}
+	void Window::SetParametrs(const uint width, const uint height, const uint x, const uint y, DWORD style)
+	{
+		width_ = width;
+		height_ = height;
+		x_ = x;
+		y_ = y;
+		style_ = style;
+	}
 
-		void Window::SetStyle(Style style) noexcept
-		{ 
-			style_ = style; 
-			SetWindowLongPtr(self_handle_, GWL_STYLE, style_);
-		}
+	void Window::SetStyle(Style style) noexcept
+	{ 
+		style_ = style; 
+		SetWindowLongPtr(self_handle_, GWL_STYLE, style_);
+	}
 
-		void Window::SetCaption(const wchar_t* caption)
-		{
-			win_caption_ = caption; 
-			SetWindowText(self_handle_, win_caption_);
-		}
+	void Window::SetCaption(const wchar_t* caption)
+	{
+		win_caption_ = caption; 
+		SetWindowText(self_handle_, win_caption_);
+	}
 
-		void Window::SetShowState(int show_state)noexcept
-		{
-			show_state_ = show_state;
-		}
+	void Window::SetShowState(int show_state)noexcept
+	{
+		show_state_ = show_state;
+	}
 
-		void  Window::Show()
-		{
-			bool temp = ShowWindow(self_handle_, show_state_);
-		}
+	void  Window::Show()
+	{
+		bool temp = ShowWindow(self_handle_, show_state_);
+	}
 
-
-		void Window::StartMessageLoop()
-		{
-			
+	void Window::StartMessageLoop()
+	{
+		
 			
 			/*
 				typedef struct tagMSG {
@@ -188,14 +199,13 @@ namespace wnd {
 				} MSG;
 			*/
 
-			MSG msg;
-			msg = { 0 };
-			while (GetMessage(&msg, NULL, NULL, NULL) != NULL) {
+		MSG msg;
+		msg = { 0 };
+		while (GetMessage(&msg, NULL, NULL, NULL) != NULL) {
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
 
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-
-			}
+		}
 
 			// BOOL GetMessage(
 			// MSG lpMsg, - адрес структуры куда поместить сообщение
@@ -210,8 +220,8 @@ namespace wnd {
 
 			//Функция DispatchMessage распределяет сообщение оконной процедуре WndProc.
 
-		}
+	}
 
-		uint Window::number_of_windows_ = 0;
+	uint Window::number_of_windows_ = 0;
 
 }

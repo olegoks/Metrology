@@ -32,14 +32,14 @@ namespace wnd {
 		void SetStyle(Style style)noexcept;
 		void SetCaption(const wchar_t* caption);
 		void SetShowState(int show_state)noexcept;
-		inline void SetHeight(uint height)noexcept { height_ = height; };
-		inline void SetWidth(uint width)noexcept { width_ = width; };
+		inline void SetHeight(uint height)noexcept { SetWindowPos(WndHandle(), HWND_NOTOPMOST, x_, y_, width_, height, SWP_NOMOVE); height_ = height; };
+		inline void SetWidth(uint width)noexcept { SetWindowPos(WndHandle(), HWND_NOTOPMOST, x_, y_, width, height_, SWP_NOMOVE);  width_ = width; };
 		inline void SetPosition(uint x, uint y)noexcept { x_ = x; y_ = y; };
 		inline HWND WndHandle()const noexcept { return self_handle_; };
 		inline HINSTANCE AppInstanceHandle()const noexcept { return app_instance_handle_; };
-
 		virtual void WindowCreate() {};
 		virtual void ButtonClicked(uint notification_code, HWND button_handle) {};
+
 	public:
 
 		void Create();

@@ -125,6 +125,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Parser.cpp" />
     <ClCompile Include="window\Button\Button.cpp" />
     <ClCompile Include="window\Component\Component.cpp" />
     <ClCompile Include="window\DialogWindow\DialogWindow.cpp" />
@@ -132,6 +133,7 @@
     <ClCompile Include="window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="window\Button\Button.h" />
     <ClInclude Include="window\Component\Component.h" />
     <ClInclude Include="window\DialogWindow\DialogWindow.h" />
