@@ -297,6 +297,9 @@ int Parser::parseLexem()
 				if ((statement_start = arr2[i].find(")")) != string::npos) {
 					arr2[i].erase(statement_start, 1);
 				}
+				if ((statement_start = arr2[i].find(")")) != string::npos) {
+					arr2[i].erase(statement_start, 1);
+				}
 
 				if (lexemInJavaKeywords((arr2[i]))) {
 					addOperator(arr2[i]);
