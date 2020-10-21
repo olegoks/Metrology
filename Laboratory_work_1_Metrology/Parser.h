@@ -9,13 +9,14 @@ using std::string;
 using std::vector;
 
 static const string java_keywords[33] = { "abstract", "continue", "for", "new",
-   "switch", "assert", "default", "goto", "synchronized", "do", "if", "this", "break", "implements",
-"protected", "throw", "else" , "throws", "case", "enum", "instanceof", "return","transient", "catch",
-"extends", "try", "interface", "finally", "strictfp", "volatile", "native", "super", "while" };
+   "switch", "assert", "default", "goto",
+"synchronized", "do", "if", "this", "break", "implements",
+"protected", "throw", "else" , "throws", "case", "enum", "instanceof", "return",
+"transient", "catch", "extends", "try", "interface",
+"finally", "strictfp", "volatile", "native", "super", "while" };
 
-static const string java_statements[39] = { ">>>=", ">>=", "<<=", "==", "<=", ">=", "!=", "&&", "||"
-"++", "--", "->", "::", "+=", "-=", "*=", "/=", "&=", "|=", "^=", "%=", "@", ",", ";", "=", ">", "<",
-"!", "~", "?", ":","-", "*", "/", "&", "|", "^", "%" , "+" };
+static const string java_statements[39] = { ">>>=", ">>=", "<<=", "==", "<=", ">=", "!=", "&&", "||", "++", "--", "->", "::", "+=", "-=", "*=", "/=", "&=", "|=", "^=", "%=",
+	 "@", ",", ";", "=", ">", "<", "!", "~", "?", ":","-", "*", "/", "&", "|", "^", "%" , "+" };
 
 static const string not_operators[32] = { "void", "#", "integer", "string", "java", "System", "io", "IOException", "com",
 	"company",  "NumberFormatException", "in", "public", "import", "static", "package", "class", "float", "short", "byte", "double",
@@ -25,13 +26,14 @@ static const string not_in[33] = { "void", "#", "integer", "String", "string", "
 	"company", "Main", "NumberFormatException", "in", "public", "import", "static", "package", "class", "float", "short", "byte", "double",
 	"const", "long", "word", "out", "boolean", "BufferedReader", "InputStreamReader", "int", "char" };
 
+struct lexems {
+
+	char lexem[50]; 
+	int ammount;
+
+};
+
 class Parser final{
-
-	struct lexems {
-		char lexem[50]; // имя опера(тора)нда
-		int ammount; // число вхождений
-	};
-
 private:
 
 	std::vector<lexems> operators, operands;
@@ -46,20 +48,23 @@ private:
 	int lexemInNotOperators(string& lexem);
 	int overallOperators();
 	int overallOperands();
-	void outputOperators();
-	void outputOperands();
 	
-
 protected:
 public:
+
+	void outputOperators();
+	void outputOperands();
 	void parseStrings();
 	void parseLexems();
 	int parseLexem();
-	void SetFileName(const string& file_name)noexcept { file_name_ = file_name; };
+	void SetFileName(const string& file_name)noexcept;
 	explicit Parser(const string& file_name)noexcept:file_name_(file_name){}
 	explicit Parser()noexcept = default;
 	inline size_t GetOperatorsCount() const noexcept { return operators.size(); }
 	inline size_t GetOperandsCount() const noexcept { return operands.size(); }
+	const lexems& GetOperand(const size_t index)const noexcept { return operands[index]; };
+	const lexems& GetOperator(const size_t index)const noexcept { return operators[index]; };
+	void clear() { arr.clear(); arr2.clear(); operators.clear(); operands.clear(); }
 };
 
 #endif _PARSER_H_

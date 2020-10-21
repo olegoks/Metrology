@@ -2,7 +2,9 @@
 #include "Button/Button.h"
 #include "DialogWindow/DialogWindow.h"
 #include "Parser.h"
-
+#include "Console.h"
+#include <iostream>
+#include <cmath>
 
 class MyWindow :public wnd::Window {
 private:
@@ -17,6 +19,8 @@ protected:
 	Button parse_program_;
 	DialogWindow open_file_;
 	Parser parser_;
+
+	std::vector<Text> table_;
 
 public:
 
@@ -43,7 +47,7 @@ LRESULT CALLBACK ChildProc(HWND hwnd, UINT Message, WPARAM wparam, LPARAM lparam
 void MyWindow::WindowCreate() {
 
 	SetCaption(_T("Metrology. Java parsing."));
-	SetStyle(WS_OVERLAPPEDWINDOW | WS_VSCROLL | WS_MAXIMIZE);
+	SetStyle(WS_OVERLAPPEDWINDOW | WS_MAXIMIZE);
 	size_t width = GetSystemMetrics(SM_CXSCREEN);
 	SetWidth(GetSystemMetrics(SM_CXSCREEN)+ 200);
 	SetHeight(GetSystemMetrics(SM_CYSCREEN));
@@ -52,35 +56,17 @@ void MyWindow::WindowCreate() {
 	const int show_state = SW_SHOWNORMAL;
 
 	
-	text_2.SetParametrs(0, 102, 100, 100);
+	/*text_2.SetParametrs(100, 102, 100, 100);
 	text_2.Create(WndHandle(), _T("Some text_2."), text_style);
-	text_2.Show(show_state);
+	text_2.Show(show_state);*/
 
-	open_file_dialog_.SetParametrs(100, 0, 100, 50);
+	open_file_dialog_.SetParametrs(10, 10, 150, 70);
 	open_file_dialog_.Create(WndHandle(), _T("Open file"), text_style);
 	open_file_dialog_.Show(show_state);
 
-
-	/*WNDCLASS w;
-	memset(&w, 0, sizeof(WNDCLASS));
-	w.lpfnWndProc = ChildProc;
-	w.hInstance = app_instance_handle_;
-	w.hbrBackground = NULL;
-	w.lpszClassName = _T("ChildWClass");
-	w.hCursor = LoadCursor(NULL, IDC_CROSS);
-	RegisterClass(&w);
-	HWND child;
-	child = CreateWindowEx(0, _T("ChildWClass"), (LPCTSTR)NULL,
-		WS_CHILD | WS_BORDER | WS_VISIBLE | WS_VSCROLL, 0, 0,
-		500, 500, self_handle_, (HMENU)(int)(100), app_instance_handle_, NULL);
-	ShowWindow(child, SW_NORMAL);
-	UpdateWindow(child);*/
-
-	text.SetParametrs(200, 200, 600, 300);
-	text.Create(WndHandle(), _T("Some text_1."), text_style);
-	text.Show(show_state);
-
-	//open_file_.Create(WndHandle()ome.txt");
+	parse_program_.SetParametrs(10, 10 + 70 + 10, 150, 70);
+	parse_program_.Create(WndHandle(), _T("Parse program"), text_style);
+	parse_program_.Show(show_state);
 
 }
 
@@ -94,19 +80,149 @@ void MyWindow::ButtonClicked(uint notification_code, HWND button_handle) {
 		w_dialog_file_name = open_file_.Create(WndHandle());
 		std::string dialog_file_name(w_dialog_file_name.begin(), w_dialog_file_name.end());
 		parser_.SetFileName(dialog_file_name);
-		text.SetText(w_dialog_file_name.c_str());
+		for (const auto& obj:table_)obj.Destroy();
+		table_.clear();
 
 	}
 
 	if (button_handle == parse_program_) {
+		
+		parser_.clear();
 		parser_.parseStrings();
 		parser_.parseLexems();
 		parser_.parseLexem();
+
+		const size_t operators_count = parser_.GetOperatorsCount();
+		const size_t operands_count = parser_.GetOperandsCount();
+
+		parser_.outputOperands();
+		std::cout << std::endl;
+		parser_.outputOperators();
+		std::cout << std::endl;
+		
+		const size_t separator = 10;
+		const size_t index_width = 30;
+		const size_t index_height = 20;
+		const size_t count_width = 30;
+		const size_t count_height = 20;
+		const size_t x_table = 200;
+		const size_t y_table = 10;
+		const size_t text_height = 20;
+		const size_t text_width = 300;
+		const size_t lines_in_column = 49;
+		const size_t new_column = separator + index_width + text_width + count_width;
+
+		//table_.reserve(x_table + y_table);
+
+		const Style text_style = WS_CHILD | WS_VISIBLE;
+		const int show_state = SW_SHOWNORMAL;
+		int offset_x = 0;
+		int offset_y = 0;
+
+		for (size_t i = 0; i < operators_count; i++)
+		{
+
+			Text index(app_instance_handle_);
+			index.SetParametrs(x_table + offset_x, y_table + i * text_height +offset_y, index_width, index_height);
+			std::string index_s = std::to_string(i);
+			std::wstring index_w(index_s.begin(), index_s.end());
+			index.Create(WndHandle(), index_w.c_str(), text_style);
+			index.Show(show_state);
+			table_.push_back(index);
+
+			Text text_operator(app_instance_handle_);
+			text_operator.SetParametrs(x_table + offset_x + index_width, y_table + i * text_height + offset_y, text_width, text_height);
+			lexems current_lexem = parser_.GetOperator(i);
+			std::string lexem_s(current_lexem.lexem);
+			std::wstring lexem(lexem_s.begin(), lexem_s.end());
+			text_operator.Create(WndHandle(), lexem.c_str(), text_style);
+			text_operator.Show(show_state);
+			table_.push_back(text_operator);
+
+			Text text_operator_count(app_instance_handle_);
+			text_operator_count.SetParametrs(x_table + offset_x + index_width + text_width + separator, y_table + i * text_height + offset_y, count_width, index_height);
+			current_lexem = parser_.GetOperator(i);
+			lexem_s = std::to_string(current_lexem.ammount);
+			std::wstring lexem_w(lexem_s.begin(), lexem_s.end());
+			text_operator_count.Create(WndHandle(), lexem_w.c_str(), text_style);
+			text_operator_count.Show(show_state);
+			table_.push_back(text_operator_count);
+
+			if (i+3 > lines_in_column ) {
+				offset_x = new_column + separator;
+				offset_y = -(int)(lines_in_column * text_height);
+			}
+		}
+
+		offset_x = 0;
+		offset_y = 0;
+
+		for (size_t i = 0; i < operands_count; i++)
+		{
+
+			Text index(app_instance_handle_);
+			index.SetParametrs(x_table + offset_x + 2 * new_column + 2 * separator, y_table + i * text_height + offset_y, index_width, index_height);
+			std::string index_s = std::to_string(i);
+			std::wstring index_w(index_s.begin(), index_s.end());
+			index.Create(WndHandle(), index_w.c_str(), text_style);
+			index.Show(show_state);
+			table_.push_back(index);
+			
+			Text text_operand(app_instance_handle_);
+			text_operand.SetParametrs(x_table + offset_x + 2*new_column + 2 * separator + index_width, y_table + i * text_height + offset_y, text_width, text_height);
+			lexems current_lexem = parser_.GetOperand(i);
+			std::string lexem_s(current_lexem.lexem);
+			std::wstring lexem(lexem_s.begin(), lexem_s.end());
+			text_operand.Create(WndHandle(), lexem.c_str(), text_style);
+			text_operand.Show(show_state);
+			table_.push_back(text_operand);
+			
+			Text text_operand_count(app_instance_handle_);
+			text_operand_count.SetParametrs(x_table + offset_x + 2 * new_column + 2 * separator + index_width + text_width + separator, y_table + i * text_height + offset_y, count_width, text_height);
+			current_lexem = parser_.GetOperand(i);
+			lexem_s = std::to_string(current_lexem.ammount);
+			std::wstring lexem_w(lexem_s.begin(), lexem_s.end());
+			text_operand_count.Create(WndHandle(), lexem_w.c_str(), text_style);
+			text_operand_count.Show(show_state);
+			table_.push_back(text_operand_count);
+
+			if (i+3 > lines_in_column + 1){
+				offset_x = new_column + separator;
+				offset_y = -(int)(lines_in_column * text_height);
+			}
+
+		}
+
+		size_t all_operators = 0;
+		size_t all_operands = 0;
+
+		size_t unique_operators = parser_.GetOperatorsCount();
+		size_t unique_operands = parser_.GetOperandsCount();
+
+		for (size_t i = 0; i < unique_operators; i++ )all_operators += parser_.GetOperator(i).ammount;
+		for (size_t i = 0; i < unique_operands; i++)all_operands += parser_.GetOperand(i).ammount;
+		
+		Text unique(app_instance_handle_);
+		unique.SetParametrs(separator, 170, 150, 150);
+		std::wstring unique_metrics = (L"Уникальных операторов: " + std::to_wstring(unique_operators) + L" \nВхождения операторов: " + std::to_wstring(all_operators) + L"\nУникальные операнды: " + std::to_wstring(unique_operands) + L"\nВхождения операндов: " + std::to_wstring(all_operands));
+		unique.Create(WndHandle(), unique_metrics.c_str(), text_style);
+		unique.Show(show_state);
+		table_.push_back(unique);
+
+		Text program_metrics(app_instance_handle_);
+		program_metrics.SetParametrs(separator, 170 + 150 + separator, 150, 150);
+		std::wstring program_metrics_w = (L"Объем программы: " + std::to_wstring( static_cast<size_t>( (all_operators + all_operands) * (log(unique_operators + unique_operands)/log(2)))) + L" \nДлина программы: " + std::to_wstring(all_operators + all_operands) + L"\nСловарь программы: " + std::to_wstring(unique_operators + unique_operands));
+		program_metrics.Create(WndHandle(), program_metrics_w.c_str(), text_style);
+		program_metrics.Show(show_state);
+		table_.push_back(program_metrics);
+
 	}
+
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 
+	//Console console("Log console.");
 	MyWindow main_window(hInstance);
 	main_window.Create();
 	main_window.Show();

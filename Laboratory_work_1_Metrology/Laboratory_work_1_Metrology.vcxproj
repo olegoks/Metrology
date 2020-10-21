@@ -124,8 +124,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Console.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="wchar_tFunctions.cpp" />
     <ClCompile Include="window\Button\Button.cpp" />
     <ClCompile Include="window\Component\Component.cpp" />
     <ClCompile Include="window\DialogWindow\DialogWindow.cpp" />
@@ -133,7 +135,9 @@
     <ClCompile Include="window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Console.h" />
     <ClInclude Include="Parser.h" />
+    <ClInclude Include="wchar_tFunctions.h" />
     <ClInclude Include="window\Button\Button.h" />
     <ClInclude Include="window\Component\Component.h" />
     <ClInclude Include="window\DialogWindow\DialogWindow.h" />

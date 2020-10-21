@@ -22,7 +22,12 @@ void Text::SetText(const wchar_t* const new_text) {
 	text_ = new_text;
 	SetWindowText(self_handle_, new_text);
 }
+Text::~Text() {
 
+	//DestroyWindow(self_handle_);
+	//SendMessage(self_handle_, WM_DESTROY, NULL, NULL);
+
+}
 void Text::Create(HWND parent_handle, const wchar_t* text, Style style) {
 
 	if (self_handle_ == NULL) {
@@ -39,6 +44,14 @@ void Text::Create(HWND parent_handle, const wchar_t* text, Style style) {
 	}
 
 
+
+}
+
+void Text::Destroy() const noexcept
+{
+
+	bool sw = ShowWindow(self_handle_,SW_HIDE);
+	DestroyWindow(self_handle_); 
 
 }
 

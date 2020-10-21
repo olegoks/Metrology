@@ -10,10 +10,12 @@ Button::Button(HINSTANCE app_instance_handle) noexcept:
 
 void Button::SetParametrs(uint x, uint y, uint width, uint height) noexcept
 {
+	
 	x_ = x;
 	y_ = y;
 	width_ = width;
 	height_ = height;
+
 }
 
 void Button::Create(HWND parent_handle, const wchar_t* button_text, Style style) {

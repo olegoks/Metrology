@@ -16,6 +16,7 @@ int Parser::operandExists(string& operand)
 	for (int i = 0; i < operands.size(); i++) {
 		if (!strcmp(operands[i].lexem, operand.c_str())) return i + 1;
 	}
+
 	return 0;
 }
 
@@ -24,6 +25,7 @@ int Parser::operatorExists(string& operator1)
 	for (int i = 0; i < operators.size(); i++) {
 		if (!strcmp(operators[i].lexem, operator1.c_str())) return i + 1;
 	}
+
 	return 0;
 }
 
@@ -46,9 +48,12 @@ void Parser::addOperator(string& operator1)
 {
 	int i = operatorExists(operator1);
 	if (i) {
+
 		operators[i - 1].ammount++;
+
 	}
 	else {
+
 		lexems buff;
 		buff.ammount = 1;
 		strcpy_s(buff.lexem, operator1.c_str());
@@ -104,9 +109,12 @@ void Parser::outputOperators()
 void Parser::outputOperands()
 {
 	using namespace std;
+
 	for (int i = 0; i < operands.size(); i++) {
+
 		cout << operands[i].lexem << endl;
 		cout << operands[i].ammount << endl;
+
 	}
 }
 
@@ -148,6 +156,7 @@ void Parser::parseStrings()
 		}
 	}
 
+	
 }
 
 void Parser::parseLexems()
@@ -200,21 +209,26 @@ int Parser::parseLexem()
 {
 	int strFlag = 0;
 	string buff;
-	int size = arr2.size();
+	size_t size = arr2.size();
+
 	for (int i = 0; i < size; i++) {
+
 		if (strFlag) {
+
 			int j = 0;
 			buff += " ";
+
 			while ((j < arr2[i].size()) && strFlag) {
-				if (arr2[i][j] != '"') {
-					buff += arr2[i][j];
-				}
+
+				if (arr2[i][j] != '"')buff += arr2[i][j];
+			
 				else
 				{
 					buff += arr2[i][j];
 					strFlag = 0;
 					addOperand(buff);
 				}
+
 				j++;
 			}
 			arr2[i].erase(0, j);
@@ -241,7 +255,7 @@ int Parser::parseLexem()
 			if ((arr2[i].find("(") == arr2[i].size() - 1) && (arr2[i].find("(") > 1)) {
 				// prev = (*src)[i];
 				arr2[i].append(")");
-				addOperator((arr2[i]));
+				addOperator(arr2[i]);
 				string tochka = ".";
 				for (int j = 0; j < arr2[i].size(); j++) {
 					if (arr2[i][j] == '.') addOperator(tochka);
@@ -285,10 +299,10 @@ int Parser::parseLexem()
 				}
 
 				if (lexemInJavaKeywords((arr2[i]))) {
-					addOperator((arr2[i]));
+					addOperator(arr2[i]);
 					arr2[i] = "FUCK";
 				}
-				else if (lexemInNotOperators((arr2[i]))) {
+				else if (lexemInNotOperators(arr2[i])) {
 					continue;
 				}
 				else {
@@ -306,5 +320,17 @@ int Parser::parseLexem()
 			}
 		}
 	}
+
 	return 0;
+}
+
+void Parser::SetFileName(const string& file_name) noexcept
+{
+	file_name_ = file_name;
+
+	arr.clear();
+	arr2.clear();
+	operands.clear();
+	operators.clear();
+
 }

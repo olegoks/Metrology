@@ -24,18 +24,18 @@ C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.2
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\xstring(2339): message :         [
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\xstring(2339): message :             _Iter=wchar_t *
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\xstring(2339): message :         ]
-D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(95): message :  выполняется компиляция ссылки на экземпляр шаблон функции "std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,void>(_Iter,_Iter,const _Alloc &)"
-D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(95): message :         with
-D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(95): message :         [
-D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(95): message :             _Elem=wchar_t,
-D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(95): message :             _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
-D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(95): message :             _Alloc=std::allocator<char>
-D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(95): message :         ]
-D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(95): message :  выполняется компиляция ссылки на экземпляр шаблон функции "std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,void>(_Iter,_Iter,const _Alloc &)"
-D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(95): message :         with
-D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(95): message :         [
-D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(95): message :             _Elem=wchar_t,
-D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(95): message :             _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
-D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(95): message :             _Alloc=std::allocator<char>
-D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(95): message :         ]
+D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(81): message :  выполняется компиляция ссылки на экземпляр шаблон функции "std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,void>(_Iter,_Iter,const _Alloc &)"
+D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(81): message :         with
+D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(81): message :         [
+D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(81): message :             _Elem=wchar_t,
+D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(81): message :             _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
+D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(81): message :             _Alloc=std::allocator<char>
+D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(81): message :         ]
+D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(81): message :  выполняется компиляция ссылки на экземпляр шаблон функции "std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,void>(_Iter,_Iter,const _Alloc &)"
+D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(81): message :         with
+D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(81): message :         [
+D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(81): message :             _Elem=wchar_t,
+D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(81): message :             _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
+D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(81): message :             _Alloc=std::allocator<char>
+D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\main.cpp(81): message :         ]
   Laboratory_work_1_Metrology.vcxproj -> D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\Debug\Laboratory_work_1_Metrology.exe
