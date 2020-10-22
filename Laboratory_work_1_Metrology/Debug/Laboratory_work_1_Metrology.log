@@ -11,6 +11,6 @@ D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\Parser.cpp(174,22
 D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\Parser.cpp(214,20): warning C4018:  <: несоответствие типов со знаком и без знака
 D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\Parser.cpp(221,14): warning C4018:  <: несоответствие типов со знаком и без знака
 D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\Parser.cpp(240,14): warning C4018:  <: несоответствие типов со знаком и без знака
-D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\Parser.cpp(260,23): warning C4018:  <: несоответствие типов со знаком и без знака
-D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\Parser.cpp(321,25): warning C4018:  <: несоответствие типов со знаком и без знака
-  Laboratory_work_1_Metrology.vcxproj -> D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\Debug\Laboratory_work_1_Metrology.exe
+D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\Parser.cpp(256,31): error C2059:  синтаксическая ошибка: )
+D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\Parser.cpp(266,23): warning C4018:  <: несоответствие типов со знаком и без знака
+D:\C++\Metrology\Laboratory_work_1\Laboratory_work_1_Metrology\Parser.cpp(326,25): warning C4018:  <: несоответствие типов со знаком и без знака

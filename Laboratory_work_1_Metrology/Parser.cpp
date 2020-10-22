@@ -1,5 +1,5 @@
 #include "Parser.h"
-
+#include "Console.h"
 #include <iostream>
 #include <fstream>
 
@@ -253,6 +253,12 @@ int Parser::parseLexem()
 		}
 		if (arr2[i].size() != 0) {
 			if ((arr2[i].find("(") == arr2[i].size() - 1) && (arr2[i].find("(") > 1)) {
+				if (arr2[i].find("(") > 3))  {
+					string skobki = "()";
+					addOperand(skobki);
+
+
+				}
 				// prev = (*src)[i];
 				arr2[i].append(")");
 				addOperator(arr2[i]);
@@ -260,9 +266,8 @@ int Parser::parseLexem()
 				for (int j = 0; j < arr2[i].size(); j++) {
 					if (arr2[i][j] == '.') addOperator(tochka);
 				}
-				string skobki = "()";
-				addOperator(skobki);
-				arr2[i] = "FUCK";
+				
+				arr2[i] = "DUCK";
 			}
 			else {
 				int statement_start;
@@ -321,7 +326,7 @@ int Parser::parseLexem()
 						for (int j = 0; j < arr2[i].size(); j++) {
 							if (arr2[i][j] == '.') addOperator(tochka);
 						}
-						arr2[i] = "FUCK";
+						arr2[i] = "DUCK";
 
 					}
 				}
@@ -336,7 +341,7 @@ int Parser::parseLexem()
 void Parser::SetFileName(const string& file_name) noexcept
 {
 	file_name_ = file_name;
-
+	//Console console("Log console.");
 	arr.clear();
 	arr2.clear();
 	operands.clear();

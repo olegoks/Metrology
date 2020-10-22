@@ -204,7 +204,7 @@ void MyWindow::ButtonClicked(uint notification_code, HWND button_handle) {
 		
 		Text unique(app_instance_handle_);
 		unique.SetParametrs(separator, 170, 150, 150);
-		std::wstring unique_metrics = (L"Уникальных операторов: " + std::to_wstring(unique_operators) + L" \nВхождения операторов: " + std::to_wstring(all_operators) + L"\nУникальные операнды: " + std::to_wstring(unique_operands) + L"\nВхождения операндов: " + std::to_wstring(all_operands));
+		std::wstring unique_metrics = (L"Словарь операторов: " + std::to_wstring(unique_operators) + L" \nОбщее число операторов: " + std::to_wstring(all_operators) + L"\nСловарь операндов: " + std::to_wstring(unique_operands) + L"\nОбщее число операндов: " + std::to_wstring(all_operands));
 		unique.Create(WndHandle(), unique_metrics.c_str(), text_style);
 		unique.Show(show_state);
 		table_.push_back(unique);
@@ -217,6 +217,8 @@ void MyWindow::ButtonClicked(uint notification_code, HWND button_handle) {
 		table_.push_back(program_metrics);
 
 	}
+
+
 
 }
 

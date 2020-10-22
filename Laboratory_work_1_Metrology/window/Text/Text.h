@@ -25,6 +25,7 @@ public:
 
 			ShowWindow(self_handle_, SW_SHOWNORMAL);
 	}
+
 	~Text();
 	bool Show(int show_state) {
 
